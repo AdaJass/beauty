@@ -24,7 +24,7 @@ async def fetchData(url, callback = pd.processData, params=None):
         # with open('first.html','w', encoding='utf-8') as f:
         #     f.write(r)
         # await asyncio.sleep(1)
-        re = await s.get('http://www.umei.cc/meinvtupian/xingganmeinv/162297.htm')
+        re = await s.get('http://www.umei.cc/meinvtupian/xingganmeinv/8795.htm')
         re = await re.text(encoding='utf-8')
         # with open('first.html','w', encoding='utf-8') as f:
         #     f.write(re)

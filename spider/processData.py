@@ -57,6 +57,35 @@ async def getUrlList(session):
         urljson = json.dumps(urljson)
         f.write(urljson)
 
+async def fetchImgUrl(session):
+    f=open('imgsurl.txt','a', encoding='utf-8')
 
+    async def parseData(session,nexturl,f):
+        r= await session.get(nexturl)        
+        r= await r.text(encoding='utf-8')
+        # await asyncio.sleep(1)
+        d = pq(r)
+        div = d('div#ArticleId22 p')
+        picurl = div('a').attr('href')
+        imgurl = div('a img').attr('src')
+        print('next url is: ',picurl,' imgurl is:',imgurl)
+        f.write(imgurl+'\n')
+        
+        if picurl.startswith('http'):            
+            return
+        else:
+            nexturl=nexturl[:nexturl.rindex('/')+1] + picurl
+            await parseData(session,nexturl,f)
+
+    for nexturl in urljson:
+        try:
+            await parseData(session,nexturl,f)
+            await asyncio.sleep(1)
+        except Exception:
+            await asyncio.sleep(5)
+        
+        
+        
+        
 
 

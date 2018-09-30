@@ -2,6 +2,7 @@ import asyncio
 from pyquery import PyQuery as pq
 import config
 import json
+import aiofiles
 
 # with open('urlid.txt','r', encoding='utf-8') as f:
 #     crawl_list = f.readlines()
@@ -84,8 +85,25 @@ async def fetchImgUrl(session):
         except Exception:
             await asyncio.sleep(5)
         
-        
-        
-        
+async def fetchImg(session):
+    imgurls = []
+    with open('imgsurl.txt','r',encoding='utf-8') as f:
+        imgurls = f.readlines()
+    
+    async def parseData(s,url):
+        # aiofiles.open('filename', mode='r')
+        try:
+            r = await s.get(url) 
+            r = await r.read()
+            # print(r)
+            # exit()
+        except Exception:
+            return
+        name = url.split('/')[-1]
+        async with aiofiles.open('./umeizi/'+name, mode='wb') as f:
+            await f.write(r)
 
-
+    for sub in range(0,len(imgurls),10):        
+        coroutines = [parseData(session, imgurls[i+sub].replace('\n','')) for i in range(10)]                
+        for coroutine in asyncio.as_completed(coroutines):
+            await coroutine

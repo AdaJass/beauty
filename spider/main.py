@@ -34,6 +34,6 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     url='http://www.umei.cc/tags/meinv.htm'
     #coroutine in tasks will run 
-    tasks = [fetchData(url, pd.fetchImgUrl)]    
+    tasks = [fetchData(url, pd.fetchImg)]    
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close() 
